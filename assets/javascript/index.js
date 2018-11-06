@@ -3,86 +3,98 @@ $(document).ready(function () {
 // Creating Product List Array
 const productList = [
     {
-       category: 'Bath Bombs',
+       id:  '1',
+       category: 'BathBombs',
        name: 'Twilight',
-       img: src= './assets/images/Twilight.jpg'
+       img: src= 'Twilight.jpg'
     },
 
     {
-        category: 'Bath Bombs',
+        id: '2',
+        category: 'BathBombs',
         name: 'Cotton Candy',
-        img: src= './assets/images/Cotton-Candy.jpg'
+        img: src= 'stars.jpg'
      },
 
      {
-        category: 'Bath Bombs',
+        id: '3',
+        category: 'BathBombs',
         name: 'Luxury Lush',
-        img: src= './assets/images/Luxury-Lush.jpg'
+        img: src= 'Luxury-Lush.jpg'
      },
 
      {
-        category: 'Bath Bombs',
+        id: '4',
+        category: 'BathBombs',
         name: 'Snow Fairy',
-        img: src= './assets/images/Snow-Fairy.jpg'
+        img: src= 'Snow-Fairy.jpg'
      },
 
      {
-        category: 'Bubble Bars',
+        id: '5',
+        category: 'BubbleBars',
         name: 'Lemon Paint Brush',
-        img: src= './assets/images/Lemon-Brush-BB.jpg'
+        img: src= 'Lemon-Brush-BB.jpg'
      },
 
      {
-        category: 'Bubble Bars',
+        id: '6',
+        category: 'BubbleBars',
         name: 'Magic Wand',
-        img: src= './assets/images/Magic-Wand-BB.jpg'
+        img: src= 'Magic-Wand-BB.jpg'
      },
 
      {
-        category: 'Bubble Bars',
+        id: '7',
+        category: 'BubbleBars',
         name: 'Pink Flower',
-        img: src= './assets/images/Pink-Flower-BB.jpg'
+        img: src= 'Pink-Flower-BB.jpg'
      },
 
      {
-        category: 'Bubble Bars',
+        id: '8',
+        category: 'BubbleBars',
         name: 'Sunny Side',
-        img: src= './assets/images/Sunny-Side-BB.jpg'
+        img: src= 'Sunny-Side-BB.jpg'
      },
 
      {
+        id: '9',
         category: 'Soap ',
         name: 'Bohemian',
-        img: src= './assets/images/Bohemian-SP.jpg'
+        img: src= 'Bohemian-SP.jpg'
      },
 
      {
+        id: '10',
         category: 'Soap ',
         name: 'Christmas Citrus',
-        img: src= './assets/images/Christmas-Citrus-SP.jpg'
+        img: src= 'Christmas-Citrus-SP.jpg'
      },
 
      {
+        id: '11',
         category: 'Soap ',
         name: 'Merry Berry',
-        img: src= './assets/images/Merry-Berry-SP.jpg'
+        img: src= 'Merry-Berry-SP.jpg'
      },
 
      {
+        id: '12',
         category: 'Soap ',
         name: 'Midnight',
-        img: src= './assets/images/Midnight-SP.jpg'
+        img: src= 'Midnight-SP.jpg'
      },
 ]
 
 // Sidebar Collaspe Functions
 
-
     $("#sidebar").mCustomScrollbar({
          theme: "minimal"
     });
 
-    $('#sidebarCollapse').on('click', function () {
+    $('#sidebarCollapse').on('click', function () 
+    {
         // open or close navbar
         $('#sidebar').toggleClass('active');
         // close dropdowns
@@ -92,31 +104,96 @@ const productList = [
         $('a[aria-expanded=true]').attr('aria-expanded', 'false');
     });
 
-    
 
-    //Declare Category Array
-    var categories = [];
+   // Create item cards from Product List
+   const productCard = function(id, category, name, image) 
+   {
+       return `
+       
+       <div class= "col-sm-12 col-md-6 col-lg-4  border border-dark ">
+         <div class "card mb-6 p-5">
+            <img class ="card-top justify-content-center" src="./assets/images/${image}" alt="Product">
+           
+           
+            <div class="card-body">
+                <h5 class="card-category d-flex justify-content-center">${category}</h5>
+                <h3 class="card-title d-flex justify-content-center">${name}</h5>
+               
+            </div>
 
-    //Render Productlist on the page
-    const render = function () {
+            <div class="card-footer">
+                  <button type="button" class="btn btn-primary" item-id="${id}">Add to Cart</button>
+            </div>
 
-        for (let i = 0; i < productList.length; i++) {
+         </div>
+       </div>
+        `  
+   }
 
-            const itemBtn = $(`<img class=" p-3 m-2 btn btn-warning product ${productList[i].category} item-${i}">`);
-            itemBtn.attr('item-name', productList[i].name);
-            itemBtn.text(productList[i].name);
-            itemBtn.attr('src', productList[i].img);
-            $('#items').append(itemBtn);
-            $(`.item-${i}`).on('click', function () {
-                dupeFind(productList[i].img, i);
-            });
+    //Render Category of products on the page
 
+    const renderCategory = function () 
+    {
+
+        for (let i = 0; i < productList.length; i++)
+         {
+
+            let prodID = productList[i].id;
+            let prodCategory = productList[i].category;
+            let prodName = productList[i].name;
+            let prodImg = productList[i].img;
+            $('#productList').append(productCard(prodID, prodCategory, prodName, prodImg));
+
+        } 
+    }
+    renderCategory(); 
+
+    //Render Shopping Cart 
+    const renderShoppingCart = function(itemId)
+    {
+        clearCart();
+        for(let i = 0; i < productList.length; i++)
+        {
+            if(productList[i].id === itemId)
+            {
+                const inCartBtn =$('<button>');
+                inCartBtn.addClass(`btn btn-outline-success w-100 m-2`);
+                inCartBtn.attr('item', itemList[i].item);
+                inCartBtn.attr('index', i);
+                inCartBtn.text(itemList[i].item);
+                $('#cartList').append(inCartBtn);
+            }
         }
     }
-    render(); 
 
-    //Create Category Filter
+    //Filter Products
+    for (let i = 0; i < productList.length; i++)
+     {
+        $(`#${productList[i].category}`).on('click', function () 
+        {
+            $('#productList').hide();
+            $(`.${productList[i].category}`).show();
+        });
+    }
 
-    //
+
+    //Filter All: All Button shows all the categories
+    $('#all').on('click', function ()
+     {
+        $('#productList').show();
+     }); 
+
+
+    //Clear Shopping Cart
+    const clearCart = function ()
+    {
+        $('#cart').empty();
+    }
+    $('#clear').on('click', clear);
+
+
+
+
+
 
 });
