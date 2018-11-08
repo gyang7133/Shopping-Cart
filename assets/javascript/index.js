@@ -1,4 +1,9 @@
-$(document).ready(function () {
+$(function()
+{
+    renderProducts();
+    renderSC();
+
+});
 
 // Creating Product List Array
 const productList = [
@@ -86,24 +91,7 @@ const productList = [
         img: src= 'Midnight-SP.jpg'
      },
 ]
-
-// Sidebar Collaspe Functions
-
-    $("#sidebar").mCustomScrollbar({
-         theme: "minimal"
-    });
-
-    $('#sidebarCollapse').on('click', function () 
-    {
-        // open or close navbar
-        $('#sidebar').toggleClass('active');
-        // close dropdowns
-        $('.collapse.in').toggleClass('in');
-        // and also adjust aria-expanded attributes we use for the open/closed arrows
-        // in our CSS
-        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-    });
-
+const arraySC = [];
 
    // Create item cards from Product List
    const productCard = function(id, category, name, image) 
@@ -112,15 +100,11 @@ const productList = [
        
        <div class= "col-sm-12 col-md-6 col-lg-4  border border-dark ">
          <div class "card mb-6 p-5">
-            <img class ="card-top justify-content-center" src="./assets/images/${image}" alt="Product">
-           
-           
+            <img class ="card-top justify-content-center" src="./assets/images/${image}" alt="ProductCard">
             <div class="card-body">
                 <h5 class="card-category d-flex justify-content-center">${category}</h5>
                 <h3 class="card-title d-flex justify-content-center">${name}</h5>
-               
             </div>
-
             <div class="card-footer">
                   <button type="button" class="btn btn-primary" item-id="${id}">Add to Cart</button>
             </div>
@@ -130,9 +114,10 @@ const productList = [
         `  
    }
 
+
     //Render Category of products on the page
 
-    const renderCategory = function () 
+    const renderProducts = function () 
     {
 
         for (let i = 0; i < productList.length; i++)
@@ -146,54 +131,50 @@ const productList = [
 
         } 
     }
-    renderCategory(); 
-
+    
     //Render Shopping Cart 
-    const renderShoppingCart = function(itemId)
+    const renderSC = function(array)
     {
-        clearCart();
-        for(let i = 0; i < productList.length; i++)
+        if(!array)
         {
-            if(productList[i].id === itemId)
+            array = arraySC;
+        }
+    
+        $('#cartList').empty();
+        if(!array.length)
+        {
+            $('#cartList').html(`<span class="font-italic">No items in the cart.</span>`);
+        }
+        else
+        {
+            for(let i = 0; i < array.length; i++) 
             {
-                const inCartBtn =$('<button>');
-                inCartBtn.addClass(`btn btn-outline-success w-100 m-2`);
-                inCartBtn.attr('item', itemList[i].item);
-                inCartBtn.attr('index', i);
-                inCartBtn.text(itemList[i].item);
-                $('#cartList').append(inCartBtn);
+              $('#cartList').append(`<button class="btn btn-outline-primary m-1" data-item-id="${array[i].id}">${array[i].name}</buttion>`);
             }
         }
     }
 
-    //Filter Products
-    for (let i = 0; i < productList.length; i++)
-     {
-        $(`#${productList[i].category}`).on('click', function () 
-        {
-            $('#productList').hide();
-            $(`.${productList[i].category}`).show();
-        });
-    }
+   //Filter Products
+   for (let i = 0; i < productList.length; i++)
+   {
+      $(`#${productList[i].category}`).on('click', function () 
+      {
+          $('#productList').hide();
+          $(`.${productList[i].category}`).show();
+      });
+  }
+
+  //Filter All: All Button shows all the categories
+  $('#all').on('click', function ()
+   {
+      $('#productList').show();
+   }); 
 
 
-    //Filter All: All Button shows all the categories
-    $('#all').on('click', function ()
-     {
-        $('#productList').show();
-     }); 
+  //Clear Shopping Cart
+  const clearCart = function ()
+  {
+      $('#cart').empty();
+  }
+  $('#clear').on('click', clear);
 
-
-    //Clear Shopping Cart
-    const clearCart = function ()
-    {
-        $('#cart').empty();
-    }
-    $('#clear').on('click', clear);
-
-
-
-
-
-
-});
