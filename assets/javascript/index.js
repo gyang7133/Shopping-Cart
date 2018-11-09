@@ -94,7 +94,7 @@ const productList = [
 const arraySC = [];
 
    // Create item cards from Product List
-   const productCard = function(id, category, name, image) 
+   const productCard = function(itemId, category, name, image) 
    {
        return `
        
@@ -106,14 +106,13 @@ const arraySC = [];
                 <h3 class="card-title d-flex justify-content-center">${name}</h5>
             </div>
             <div class="card-footer">
-                  <button type="button" class="btn btn-primary" item-id="${id}">Add to Cart</button>
+                  <button type="button" class="btn btn-primary" data-item-id="${itemId}">Add to Cart</button>
             </div>
 
          </div>
        </div>
         `  
    }
-
 
     //Render Category of products on the page
 
@@ -149,20 +148,66 @@ const arraySC = [];
         {
             for(let i = 0; i < array.length; i++) 
             {
-              $('#cartList').append(`<button class="btn btn-outline-primary m-1" data-item-id="${array[i].id}">${array[i].name}</buttion>`);
+              $('#cartList').append(`<button class="btn btn-outline-primary m-1" data-item-id="${array[i].itemId}">${array[i].name}</button>`);
             }
         }
     }
 
+   //Add item to shopping cart
+    
+   const addItemToCart = function(itemId)
+   {
+        let product = productList.find(product => product.id === String(itemId));
+
+        if(!arraySC.includes(product))
+        {
+            arraySC.push(product);
+            renderSC();
+        }
+        else 
+        {
+            alert('Item already exists in the cart!');
+        }
+   }
+
+   //Delete an item from shopping cart
+
+   const deleteItemFromCart = function(itemId)
+   {
+       let index = arraySC.findIndex(product => product.id === String(itemId));
+       arraySC.splice(index, 1);
+       renderSC();
+   }
+
+
+
    //Filter Products
+
    for (let i = 0; i < productList.length; i++)
    {
       $(`#${productList[i].category}`).on('click', function () 
       {
+          //Hide all products
           $('#productList').hide();
+
+          // Only show products that have the class that matches the category that is being selected
           $(`.${productList[i].category}`).show();
       });
   }
+
+
+  //Call Back functions
+    $('#productList').on('click', 'button', function()
+      {
+          addItemToCart($(this).data('itemId'));
+  
+      });
+
+    $('#cartList').on('click', 'button', function()
+      {
+          deleteItemFromCart($(this).data('itemId'));
+      });
+
 
   //Filter All: All Button shows all the categories
   $('#all').on('click', function ()
