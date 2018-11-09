@@ -179,8 +179,6 @@ const arraySC = [];
        renderSC();
    }
 
-
-
    //Filter Products
 
    for (let i = 0; i < productList.length; i++)
@@ -191,7 +189,7 @@ const arraySC = [];
           $('#productList').hide();
 
           // Only show products that have the class that matches the category that is being selected
-          $(`.${productList[i].category}`).show();
+          $(`#${productList[i].category}`).show();
       });
   }
 
@@ -219,7 +217,7 @@ const arraySC = [];
   //Clear Shopping Cart
   const clearCart = function ()
   {
-      $('#cart').empty();
+      $('#cartList').empty();
   }
-  $('#clear').on('click', clear);
+  $('#clear').on('click', clearCart);
 
